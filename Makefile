@@ -6,3 +6,6 @@ iwwc-custom.json:
 	wget -q -O - --header "AS-Key: $(AS_KEY)" 'https://api.agent-stats.com/groups/$(AS_GROUP_ID)/custom' > "$@.tmp"
 	mv "$@.tmp" "$@"
 
+refresh:
+	wget -O - --method post --header "AS-Key: $(AS_KEY)" 'https://api.agent-stats.com/groups/$(AS_GROUP_ID)/refresh'
+
