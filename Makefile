@@ -12,8 +12,11 @@ iwwc-info.json:
 	$(wget) 'https://api.agent-stats.com/groups/$(AS_GROUP_ID)/info' > ".tmp.$@"
 	set -x;if ! [ -e "$@" ] || ! cmp -s "$@" ".tmp.$@"; then mv ".tmp.$@" "$@"; fi
 
+check:
+	$(MAKE) -B iwwc-info.json
+	$(MAKE) iwwc-custom.json
+
 refresh:
 	$(wget) --method post 'https://api.agent-stats.com/groups/$(AS_GROUP_ID)/refresh'
 
-.PHONY: iwwc-info.json
 .PHONY: refresh
