@@ -15,5 +15,5 @@ iwwc-info.json:
 refresh:
 	$(wget) --method post 'https://api.agent-stats.com/groups/$(AS_GROUP_ID)/refresh'
 
-
+.PHONY: iwwc-info.json
 .PHONY: refresh
