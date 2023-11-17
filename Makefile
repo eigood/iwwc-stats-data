@@ -2,10 +2,18 @@
 
 include $(PWD)/.env
 
-iwwc-custom.json:
-	wget -q -O - --header "AS-Key: $(AS_KEY)" 'https://api.agent-stats.com/groups/$(AS_GROUP_ID)/custom' > "$@.tmp"
-	mv "$@.tmp" "$@"
+wget := wget -q -O - --header "AS-Key: $(AS_KEY)"
+
+iwwc-custom.json: iwwc-info.json
+	$(wget) 'https://api.agent-stats.com/groups/$(AS_GROUP_ID)/custom' > ".tmp.$@"
+	mv ".tmp.$@" "$@"
+
+iwwc-info.json:
+	$(wget) 'https://api.agent-stats.com/groups/$(AS_GROUP_ID)/info' > ".tmp.$@"
+	set -x;if ! [ -e "$@" ] || ! cmp -s "$@" ".tmp.$@"; then mv ".tmp.$@" "$@"; fi
 
 refresh:
-	wget -O - --method post --header "AS-Key: $(AS_KEY)" 'https://api.agent-stats.com/groups/$(AS_GROUP_ID)/refresh'
+	$(wget) --method post 'https://api.agent-stats.com/groups/$(AS_GROUP_ID)/refresh'
 
+
+.PHONY: refresh
